@@ -1,3 +1,8 @@
+//
+//  !!NOTE!! THIS IS OUTDATED AND MAY NOT WORK.
+//
+
+
 /*This was made using va-LOL-rant made by @pean153
 * link: https://www.unknowncheats.me/forum/valorant/414174-va-lol-rant-internal-external-aimassist.html
 * 
@@ -34,6 +39,8 @@ using namespace std;
 int snapValue;
 int fovW;
 int fovH;
+
+int colorMode = 0;
 
 int get_screen_width(void) {
     return GetSystemMetrics(SM_CXSCREEN);
@@ -79,44 +86,40 @@ void clear() {
     SetConsoleCursorPosition(console, topLeft);
 }
 
-//original color purple (not set to default)
 inline bool is_color(int red, int green, int blue) {
-   if (green >= 190) {
+    
+    //original color purple
+    if (colorMode == 0) {
+        if (green >= 190) {
+            return false;
+        }
+
+        if (green >= 140) {
+            return abs(red - blue) <= 8 &&
+                red - green >= 50 &&
+                blue - green >= 50 &&
+                red >= 105 &&
+                blue >= 105;
+        }
+
+        return abs(red - blue) <= 13 &&
+            red - green >= 60 &&
+            blue - green >= 60 &&
+            red >= 110 &&
+            blue >= 100;
+    }
+
+    // yellow
+    else {
+        if (red < 160)
+        {
+            return false;
+        }
+        if (red > 161 && red < 255) {
+            return green > 150 && green < 255 && blue > 0 && blue < 79;
+        }
         return false;
     }
-
-    if (green >= 140) {
-        return abs(red - blue) <= 8 &&
-            red - green >= 50 &&
-            blue - green >= 50 &&
-            red >= 105 &&
-            blue >= 105;
-    }
-
-    return abs(red - blue) <= 13 &&
-        red - green >= 60 &&
-        blue - green >= 60 &&
-        red >= 110 &&
-        blue >= 100;
-}
-
-//red
-inline bool is_colorR(int red, int green, int blue) {
-    //red = bad.
-    return false;
-}
-
-//yellow
-inline bool is_colorY(int red, int green, int blue) {
-
-    if (red < 160)
-    {
-        return false;
-    }
-    if (red > 161 && red < 255) {
-        return green > 150 && green < 255 && blue > 0 && blue < 79;
-    }
-    return false;
 }
 
 //checking if settings.ini is present
@@ -171,114 +174,7 @@ void bot() {
 
                 if (is_color(red, green, blue)) {
                     aim_x = (i / 4) - (w/2);
-                    //original aim_y = j - (h / 2) + 3;
                     aim_y = j - (h/2) + snapValue;
-                    stop_loop = true;
-                    break;
-                }
-            }
-            if (stop_loop) {
-                break;
-            }
-        }
-        if (!stop_loop) {
-            aim_x = 0;
-            aim_y = 0;
-        }
-    }
-}
-
-//bot with red
-void botR() {
-    int w = fovW, h = fovH;
-    auto t_start = std::chrono::high_resolution_clock::now();
-    auto t_end = std::chrono::high_resolution_clock::now();
-
-    HDC hScreen = GetDC(NULL);
-    HBITMAP hBitmap = CreateCompatibleBitmap(hScreen, w, h);
-    screenData = (BYTE*)malloc(5 * screen_width * screen_height);
-    HDC hDC = CreateCompatibleDC(hScreen);
-    point middle_screen(screen_width / 2, screen_height / 2);
-
-    BITMAPINFOHEADER bmi = { 0 };
-    bmi.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.biPlanes = 1;
-    bmi.biBitCount = 32;
-    bmi.biWidth = w;
-    bmi.biHeight = -h;
-    bmi.biCompression = BI_RGB;
-    bmi.biSizeImage = 0;
-
-    while (run_threads) {
-        Sleep(6);
-        HGDIOBJ old_obj = SelectObject(hDC, hBitmap);
-        BOOL bRet = BitBlt(hDC, 0, 0, w, h, hScreen, middle_screen.x - (w / 2), middle_screen.y - (h / 2), SRCCOPY);
-        SelectObject(hDC, old_obj);
-        GetDIBits(hDC, hBitmap, 0, h, screenData, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
-        bool stop_loop = false;
-        for (int j = 0; j < h; ++j) {
-            for (int i = 0; i < w * 4; i += 4) {
-                    #define red screenData[i + (j*w*4) + 2]
-                    #define green screenData[i + (j*w*4) + 1]
-                    #define blue screenData[i + (j*w*4) + 0]
-
-                if (is_colorR(red, green, blue)) {
-                    aim_x = (i / 4) - (w / 2);
-                    //original aim_y = j - (h / 2) + 3;
-                    aim_y = j - (h / 2) + snapValue;
-                    stop_loop = true;
-                    break;
-                }
-            }
-            if (stop_loop) {
-                break;
-            }
-        }
-        if (!stop_loop) {
-            aim_x = 0;
-            aim_y = 0;
-        }
-    }
-}
-
-//bot with yellow
-void botY() {
-    int w = fovW, h = fovH;
-    auto t_start = std::chrono::high_resolution_clock::now();
-    auto t_end = std::chrono::high_resolution_clock::now();
-
-    HDC hScreen = GetDC(NULL);
-    HBITMAP hBitmap = CreateCompatibleBitmap(hScreen, w, h);
-    screenData = (BYTE*)malloc(5 * screen_width * screen_height);
-    HDC hDC = CreateCompatibleDC(hScreen);
-    point middle_screen(screen_width / 2, screen_height / 2);
-
-    BITMAPINFOHEADER bmi = { 0 };
-    bmi.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.biPlanes = 1;
-    bmi.biBitCount = 32;
-    bmi.biWidth = w;
-    bmi.biHeight = -h;
-    bmi.biCompression = BI_RGB;
-    bmi.biSizeImage = 0;
-
-    while (run_threads) {
-        Sleep(6);
-        HGDIOBJ old_obj = SelectObject(hDC, hBitmap);
-        BOOL bRet = BitBlt(hDC, 0, 0, w, h, hScreen, middle_screen.x - (w / 2), middle_screen.y - (h / 2), SRCCOPY);
-        SelectObject(hDC, old_obj);
-        GetDIBits(hDC, hBitmap, 0, h, screenData, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
-        bool stop_loop = false;
-        for (int j = 0; j < h; ++j) {
-            for (int i = 0; i < w * 4; i += 4) {
-                    #define red screenData[i + (j*w*4) + 2]
-                    #define green screenData[i + (j*w*4) + 1]
-                    #define blue screenData[i + (j*w*4) + 0]
-
-                if (is_colorY(red, green, blue)) {
-                    aim_x = (i / 4) - (w / 2);
-                    //original aim_y = j - (h / 2) + 3;
-                    aim_y = j - (h / 2) + snapValue;
                     stop_loop = true;
                     break;
                 }
@@ -388,19 +284,15 @@ int main(void) {
             fovH = reader.GetInteger("settings", "vFov", 0);
 
             if (color == "PURPLE") {
-                //aim start
-                thread(bot).detach();
-            }
-
-            else if (color == "RED") {
-                //aim start
-                thread(botR).detach();
+                // set color mode
+                colorMode = 0;
             }
 
             else if (color == "YELLOW") {
-                //aim start
-                thread(botY).detach();
+                // set color mode
+                colorMode = 1;
             }
+            thread(bot).detach();
 
             auto t_start = std::chrono::high_resolution_clock::now();
             auto t_end = std::chrono::high_resolution_clock::now();
@@ -886,18 +778,14 @@ int main(void) {
 
                     if (color == "PURPLE") {
                         //aim start
-                        thread(bot).detach();
-                    }
-
-                    else if (color == "RED") {
-                        //aim start
-                        thread(botR).detach();
+                        colorMode = 0;
                     }
 
                     else if (color == "YELLOW") {
                         //aim start
-                        thread(botY).detach();
+                        colorMode = 1;
                     }
+                    thread(bot).detach();
 
                     auto t_start = std::chrono::high_resolution_clock::now();
                     auto t_end = std::chrono::high_resolution_clock::now();
