@@ -1,5 +1,7 @@
 # LOLmenu
 
+# THIS IS OUTDATED / NOT WORKING! IT IS NOT READY TO USE!
+
 # THIS IS BASED OFF [VA-LOL-RANT](https://www.unknowncheats.me/forum/valorant/414174-va-lol-rant-internal-external-aimassist.html) MADE BY @pean153
 
 # Intructions:
