@@ -19,8 +19,8 @@
 **IMPORTANT - COMPILE IT AS x86 (PROJECT SETTINGS ON DOWNLOAD DON'T DEFAULT TO IT)**
 
 # ERROR FIXES (SKIP THIS PART IF YOU DON'T GET ERRORS WHEN BUILDING)
-        - for _CRT_SECURE_NO_WARNINGS go to the dll properties > C/C++ > preprocessor > in the Preprocessor Definitions add _CRT_SECURE_NO_WARNINGS
-        - for a LINK error go to the dll properties > Linker > General > under Additional Library Directories add a path to Interception > Library > x86.
+for _CRT_SECURE_NO_WARNINGS go to the dll properties > C/C++ > preprocessor > in the Preprocessor Definitions add _CRT_SECURE_NO_WARNINGS
+for a LINK error go to the dll properties > Linker > General > under Additional Library Directories add a path to Interception > Library > x86.
 
 # GENERAL INFO
 NOTHING is set to default. Set every setting yourself, then commit the changes. If you skip over a setting, it won't work correctly. It doesn't tell you if you missed a step. It will, however, tell you if you've entered something wrong.
@@ -36,10 +36,6 @@ From @pean153's post "Smoothing has reasonable values around 0.01-0.2 based on y
 **EVERYTHING IS CASE SENSITIVE. WHEN ENTERING YOUR SELECTION (e.g., CHEST, NECK, HEAD), TYPE IT IN ALL CAPS; OTHERWISE, IT WON'T GO THROUGH. THE PROGRAM SHOULD TELL YOU IF WHAT YOU'VE ENTERED IS INVALID.**
 
 **WHEN CHANGING YOUR TOGGLE KEY IT'S NORMAL TO SEE "ENTER CHAR UP TO: " (THIS IS BECAUSE OF PRESSING F2 IN CONSOLE) IT'S SAFE TO IGNORE, PRESS ANY KEY TO GET RID OF IT AND ENTER YOUR CHOICE.**
-
-# KNOWN BUGS
- - When setting certain settings, your input from the previous setting you've set will be in the prompt. To avoid any errors, remove the things present and type your selection.
- I've tried everything to fix this. The cin.clear() doesn't work for some reason. Maybe I'm missing something; feel free to let me know.
 
 # UPDATE #1
 - Added an aim FOV option
